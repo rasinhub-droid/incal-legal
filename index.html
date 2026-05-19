@@ -164,6 +164,18 @@
 <h3>2.3 Cache de respostas (hash da imagem)</h3>
 <p>Pra evitar reprocessar a mesma foto várias vezes (e poupar custo de IA), o servidor mantém em cache as respostas indexadas por <strong>SHA-256 da imagem</strong> (um identificador de 64 caracteres derivado dos bytes — não a imagem em si). Esse cache é apagado automaticamente após <strong>30 dias</strong>.</p>
 
+<h3>2.4 Logs técnicos de erro (crashes)</h3>
+<p>Quando o app trava (raríssimo, com sorte nunca), o aparelho envia pro nosso servidor um relatório técnico com:</p>
+<ul>
+  <li><strong>Versão do app</strong> (ex: <code>1.0.0</code>)</li>
+  <li><strong>Modelo do aparelho</strong> (ex: <code>Xiaomi 2311DRK48G</code>)</li>
+  <li><strong>Versão do Android</strong> (ex: <code>14</code>)</li>
+  <li><strong>Stack trace</strong> — resumo técnico de onde o código falhou (ex: <code>NullPointerException in CameraScreen.kt:142</code>)</li>
+  <li><strong>Identificador anônimo do aparelho</strong> (o mesmo UUID descrito em §2.2)</li>
+</ul>
+<p>Esses logs nos ajudam a corrigir bugs sem que você precise reportar manualmente. <strong>Não contêm fotos, ingredientes, calorias, refeições ou qualquer dado pessoal.</strong> Apagados automaticamente após <strong>90 dias</strong>.</p>
+<p>Esse mecanismo é <strong>interno</strong> (nosso backend Cloudflare) — não usamos Firebase Crashlytics, Sentry ou serviço de terceiros pra crash reporting.</p>
+
 <h2>3. O que NÃO coletamos</h2>
 <ul>
   <li><span class="cross">✗</span> Nome, e-mail, telefone, endereço</li>
