@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Política de Privacidade — InCal</title>
+<meta name="description" content="Política de privacidade do app InCal — análise nutricional de refeições por foto, com privacidade radical.">
+<style>
+  :root {
+    --brand-purple: #7E22CE;
+    --brand-green: #16A34A;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --bg: #ffffff;
+    --surface: #f9fafb;
+    --border: #e5e7eb;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.65;
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+  }
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--border);
+  }
+  h1 {
+    color: var(--brand-purple);
+    font-size: 2.25rem;
+    margin: 0 0 8px;
+    line-height: 1.2;
+  }
+  .last-updated {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+  .intro {
+    background: var(--surface);
+    border-left: 4px solid var(--brand-green);
+    padding: 16px 20px;
+    margin: 24px 0 32px;
+    border-radius: 4px;
+  }
+  h2 {
+    color: var(--brand-purple);
+    margin-top: 40px;
+    margin-bottom: 12px;
+    padding-top: 16px;
+    font-size: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  h2:first-of-type { border-top: none; padding-top: 0; }
+  h3 {
+    margin-top: 24px;
+    margin-bottom: 8px;
+    font-size: 1.15rem;
+    color: var(--text);
+  }
+  p { margin: 12px 0; }
+  ul { padding-left: 24px; margin: 12px 0; }
+  li { margin: 6px 0; }
+  code {
+    background: var(--surface);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: var(--brand-purple);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.95rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background: var(--surface);
+    font-weight: 600;
+  }
+  a {
+    color: var(--brand-purple);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s;
+  }
+  a:hover { border-bottom-color: var(--brand-purple); }
+  .email {
+    display: inline-block;
+    padding: 8px 16px;
+    background: var(--brand-green);
+    color: white;
+    border-radius: 6px;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+  .email:hover {
+    border-bottom-color: transparent;
+    opacity: 0.92;
+  }
+  footer {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-style: italic;
+  }
+  .check { color: var(--brand-green); font-weight: 600; }
+  .cross { color: #dc2626; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Política de Privacidade — InCal</h1>
+  <p class="last-updated">Última atualização: 19 de maio de 2026</p>
+</header>
+
+<div class="intro">
+  O InCal foi desenhado em torno de um princípio simples: <strong>suas fotos e seu histórico ficam no seu celular, nunca na nuvem</strong>. Este documento explica em detalhes o que o app coleta, o que ele NÃO coleta, e por quê.
+</div>
+
+<h2>1. Resumo em uma frase</h2>
+<p>Suas fotos de refeição são enviadas pra um servidor que repassa pra uma IA (Anthropic Claude) apenas pelo tempo necessário pra fazer a análise nutricional, e nada é gravado em disco — nem aqui, nem lá. Não pedimos login. Seu histórico fica no <code>/files/</code> do seu próprio aparelho.</p>
+
+<h2>2. O que coletamos</h2>
+
+<h3>2.1 Imagens (temporário, processamento)</h3>
+<p>Quando você toca "Fotografar" pra analisar uma refeição:</p>
+<ul>
+  <li>A foto é convertida em texto (Base64) e enviada pro nosso servidor (Cloudflare Workers).</li>
+  <li>O servidor chama a API da Anthropic (Claude) pra identificar o prato e estimar nutrientes.</li>
+  <li>A IA processa a imagem e devolve um JSON com calorias, macros, etc.</li>
+  <li><strong>A foto não é gravada em disco em nenhum servidor.</strong> Nem no nosso, nem no da Anthropic (ver §5.1).</li>
+</ul>
+<p>A foto é gravada <strong>APENAS no seu celular</strong>, em <code>/files/photos/&lt;analysisId&gt;.jpg</code>, e você pode apagar a qualquer momento pelo botão "Excluir" no diário.</p>
+
+<h3>2.2 Identificador anônimo do aparelho</h3>
+<p>Geramos um UUID aleatório quando o app é aberto pela primeira vez. Ele serve pra:</p>
+<ul>
+  <li>Aplicar o limite de análises diárias/mensais (cota da versão gratuita)</li>
+  <li>Manter sua assinatura (se vier a contratar)</li>
+  <li>Sobreviver a reinstalações do app via vinculação com <code>SHA-256(ANDROID_ID)</code> — um hash irreversível do ID público do aparelho</li>
+</ul>
+<p><strong>O que NÃO está vinculado a esse UUID</strong>: seu nome, e-mail, telefone, localização, conta Google ou qualquer outra informação pessoal. Não temos como descobrir quem você é.</p>
+
+<h3>2.3 Cache de respostas (hash da imagem)</h3>
+<p>Pra evitar reprocessar a mesma foto várias vezes (e poupar custo de IA), o servidor mantém em cache as respostas indexadas por <strong>SHA-256 da imagem</strong> (um identificador de 64 caracteres derivado dos bytes — não a imagem em si). Esse cache é apagado automaticamente após <strong>30 dias</strong>.</p>
+
+<h2>3. O que NÃO coletamos</h2>
+<ul>
+  <li><span class="cross">✗</span> Nome, e-mail, telefone, endereço</li>
+  <li><span class="cross">✗</span> Localização (GPS)</li>
+  <li><span class="cross">✗</span> Lista de contatos, mensagens, fotos do celular fora do app</li>
+  <li><span class="cross">✗</span> Histórico de navegação, lista de apps instalados</li>
+  <li><span class="cross">✗</span> Dados de saúde além do que você fotografa</li>
+  <li><span class="cross">✗</span> Cookies, fingerprinting, analytics de uso (sem Google Analytics, sem Firebase Analytics, sem Mixpanel, sem nada disso)</li>
+</ul>
+
+<h2>4. Permissões do Android e por quê</h2>
+<table>
+  <thead>
+    <tr><th>Permissão</th><th>Pra quê</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>CAMERA</code></td><td>Tirar foto da refeição</td></tr>
+    <tr><td><code>INTERNET</code></td><td>Enviar foto pra análise</td></tr>
+    <tr><td><code>ACCESS_NETWORK_STATE</code></td><td>Detectar sinal fraco / ausência de conexão pra mostrar erro amigável</td></tr>
+  </tbody>
+</table>
+<p>Não usamos GPS, microfone, contatos, mensagens, calendário, sensores ou qualquer outra permissão sensível.</p>
+
+<h2>5. Compartilhamento com terceiros</h2>
+
+<h3>5.1 Anthropic (provedor da IA)</h3>
+<p>Suas fotos são enviadas pra API da Anthropic (modelo Claude) <strong>apenas no momento da análise</strong>. Segundo a política comercial da Anthropic, dados enviados via API <strong>não são usados pra treinar modelos</strong> e são retidos apenas pelo tempo necessário pra processar a solicitação.</p>
+<p>Política completa: <a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener">anthropic.com/legal/privacy</a></p>
+
+<h3>5.2 Cloudflare (provedor de infraestrutura)</h3>
+<p>Nosso servidor roda na Cloudflare Workers. A Cloudflare pode coletar metadados de rede (IP de origem, user agent) pra prevenção de abuso, conforme sua política. <strong>Não enviamos identificadores pessoais pra Cloudflare.</strong></p>
+<p>Política completa: <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">cloudflare.com/privacypolicy</a></p>
+
+<h3>5.3 Google Play</h3>
+<p>Quando você instala o app pela Play Store, o Google coleta dados próprios conforme a política deles. Isso é fora do nosso controle.</p>
+
+<h2>6. Onde seus dados ficam armazenados</h2>
+<table>
+  <thead>
+    <tr><th>Dado</th><th>Onde</th><th>Por quanto tempo</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Fotos da refeição</td><td>Apenas no seu celular</td><td>Até você apagar (ou desinstalar)</td></tr>
+    <tr><td>Histórico de análises</td><td>Apenas no seu celular</td><td>Até você apagar (ou desinstalar)</td></tr>
+    <tr><td>Identificador anônimo do aparelho</td><td>Cloudflare KV</td><td>1 ano após último uso</td></tr>
+    <tr><td>Cache de respostas (hash)</td><td>Cloudflare KV</td><td>30 dias</td></tr>
+  </tbody>
+</table>
+<p><strong>Importante</strong>: como o histórico está no seu celular, <strong>fazer backup do aparelho é responsabilidade sua</strong>. Se você desinstalar o app sem backup, seus dados vão embora.</p>
+
+<h2>7. Direitos do usuário (LGPD)</h2>
+<p>A Lei Geral de Proteção de Dados (LGPD) brasileira garante alguns direitos. Veja como exercer cada um:</p>
+<ul>
+  <li><strong>Acesso aos dados</strong>: você já tem acesso completo — está tudo no seu próprio celular, no diário do app.</li>
+  <li><strong>Exclusão local</strong>: desinstalar o app apaga <strong>todo o histórico local</strong>.</li>
+  <li><strong>Exclusão do identificador remoto</strong>: pra apagar também o UUID anônimo do nosso servidor, mande um e-mail pra <a href="mailto:rasin.hub@gmail.com">rasin.hub@gmail.com</a> mencionando "exclusão de device token". Não precisamos de comprovação porque não temos como te identificar — basta o pedido.</li>
+  <li><strong>Correção</strong>: edite suas análises pelo botão "Alterar" no app.</li>
+  <li><strong>Portabilidade</strong>: exporte suas análises como CSV ou imagem pelo botão "Compartilhar" no diário.</li>
+</ul>
+
+<h2>8. Crianças</h2>
+<p>O app não é destinado a menores de 13 anos. Não temos como identificar contas individuais, mas se um responsável tem motivos pra crer que uma criança usou o app de forma indevida, pode entrar em contato.</p>
+
+<h2>9. Mudanças nesta política</h2>
+<p>Se atualizarmos esta política, a data no topo será modificada. Mudanças significativas serão comunicadas no próprio app na primeira abertura após a atualização.</p>
+
+<h2>10. Contato</h2>
+<p>Dúvidas, pedidos de exclusão de identificador, reclamações:</p>
+<p><a class="email" href="mailto:rasin.hub@gmail.com">rasin.hub@gmail.com</a></p>
+
+<footer>
+Este documento foi escrito pra ser legível por humanos, não por advogados. Se algo aqui está confuso, escreve pra gente.
+</footer>
+
+</div>
+</body>
+</html>
